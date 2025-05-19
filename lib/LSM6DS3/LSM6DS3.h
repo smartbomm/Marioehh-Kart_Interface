@@ -29,6 +29,7 @@
 
 #define LSM6DS3_STATUS_REG         0X1E
 
+#define LSM6DS3_CTRL4_C            0X13
 #define LSM6DS3_CTRL6_C            0X15
 #define LSM6DS3_CTRL7_G            0X16
 #define LSM6DS3_CTRL8_XL           0X17

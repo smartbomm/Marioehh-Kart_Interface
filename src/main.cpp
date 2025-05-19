@@ -9,19 +9,15 @@
 #include "Ringbuffer.h"
 
 
-constexpr float ACCEL_SCALE = 512.0;              // Custom scaling factor for acceleration
-constexpr float GYRO_SCALE = 32768.0 / 2000.0;    // Scale gyroscope data from dps to fixed-point
 constexpr unsigned long READ_INTERVAL_MS = 0;     // Interval between readings
 
 
 data sensorData;
 
-float accelX, accelY, accelZ;
-float gyroX, gyroY, gyroZ;
 
-int32_t fixedAccelX, fixedAccelY, fixedAccelZ;
-int32_t fixedGyroX, fixedGyroY, fixedGyroZ;
-int32_t filtered_data_accel_x, filtered_data_velocity_x, filtered_data_pos_x;
+int16_t fixedAccelX, fixedAccelY, fixedAccelZ;
+int16_t fixedGyroX, fixedGyroY, fixedGyroZ;
+int16_t filtered_data_accel_x, filtered_data_velocity_x, filtered_data_pos_x;
 uint16_t banana = 0;
 
  //Ringbuffer defined in "ringbuffer.h"
@@ -52,11 +48,8 @@ void loop() {
     bool gyroAvailable = IMU.gyroscopeAvailable();
 
     if (accelAvailable) {
-      IMU.readAcceleration(accelX, accelY, accelZ);
+      IMU.readAcceleration(fixedAccelX, fixedAccelY, fixedAccelZ);
 
-      fixedAccelX = static_cast<int32_t>(accelX * ACCEL_SCALE);
-      fixedAccelY = static_cast<int32_t>(accelY * ACCEL_SCALE);
-      fixedAccelZ = static_cast<int32_t>(accelZ * ACCEL_SCALE);
     
       // Aktualisierung des Ringpuffers 
       push_data_to_buffer(fixedAccelX, &Struct_Accel_X);
@@ -68,11 +61,7 @@ void loop() {
     }
 
     if (gyroAvailable) {
-      IMU.readGyroscope(gyroX, gyroY, gyroZ);
-
-      fixedGyroX = static_cast<int32_t>(gyroX * GYRO_SCALE);
-      fixedGyroY = static_cast<int32_t>(gyroY * GYRO_SCALE);
-      fixedGyroZ = static_cast<int32_t>(gyroZ * GYRO_SCALE);
+      IMU.readGyroscope(fixedGyroX, fixedGyroY, fixedGyroZ);
 
       // Evtl. auch hier Aktualierung des Ringpuffers für die Gyro-Werte
     }
