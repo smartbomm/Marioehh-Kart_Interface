@@ -67,6 +67,9 @@ int LSM6DS3Class::begin()
   // Set the ODR config register to ODR/4
   writeRegister(LSM6DS3_CTRL8_XL, 0x09);
 
+  // Accelerometer bandwidth selection
+  //writeRegister(LSM6DS3_CTRL4_C, 0x80);
+
   return 1;
 }
 
