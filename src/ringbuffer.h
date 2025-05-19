@@ -52,8 +52,7 @@ int32_t moving_average (common_buffer_data* buffer) {
 }
 
 void integration(common_buffer_data* buffer) {
-    //uint32_t dt = time
-    //int32_t dx = value 
+    
 
 
 }

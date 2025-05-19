@@ -54,18 +54,18 @@ int LSM6DS3Class::begin()
     return 0;
   }
 
-  //set the gyroscope control register to work at 104 Hz, 2000 dps and in bypass mode
-  writeRegister(LSM6DS3_CTRL2_G, 0x4C);
+  //Set the gyroscope control register to work at 104 Hz, 1000 dps
+  writeRegister(LSM6DS3_CTRL2_G, 0x48);
 
-  // Set the Accelerometer control register to work at 104 Hz, 4 g,and in bypass mode and enable ODR/4
+  // Set the Accelerometer control register to work at 416 Hz, Full Scale at ,and in bypass mode and enable ODR/4
   // low pass filter (check figure9 of LSM6DS3's datasheet)
-  writeRegister(LSM6DS3_CTRL1_XL, 0x4A);
+  writeRegister(LSM6DS3_CTRL1_XL, 0x64);
 
   // set gyroscope power mode to high performance and bandwidth to 16 MHz
   writeRegister(LSM6DS3_CTRL7_G, 0x00);
 
   // Set the ODR config register to ODR/4
-  writeRegister(LSM6DS3_CTRL8_XL, 0x09);
+  writeRegister(LSM6DS3_CTRL8_XL, 0x00);
 
   // Accelerometer bandwidth selection
   //writeRegister(LSM6DS3_CTRL4_C, 0x80);
