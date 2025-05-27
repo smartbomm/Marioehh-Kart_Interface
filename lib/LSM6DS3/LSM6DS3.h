@@ -26,14 +26,17 @@
 #define LSM6DS3_WHO_AM_I_REG       0X0F
 #define LSM6DS3_CTRL1_XL           0X10
 #define LSM6DS3_CTRL2_G            0X11
-
+#define LSM3DS3_CRTL3_C            0X12
 #define LSM6DS3_CTRL4_C            0X13
-
-#define LSM6DS3_STATUS_REG         0X1E
-
+#define LSM6DS3_CTRL5_C            0X14
 #define LSM6DS3_CTRL6_C            0X15
 #define LSM6DS3_CTRL7_G            0X16
 #define LSM6DS3_CTRL8_XL           0X17
+#define LSM6DS3_CTRL9_XL           0X18
+#define LSM6DS3_CTRL10_C           0X19
+#define LSM6DS3_CTRL8_XL           0X17
+#define LSM6DS3_STATUS_REG         0X1E
+
 
 #define LSM6DS3_OUT_TEMP_L         0X20
 
