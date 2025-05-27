@@ -26,7 +26,7 @@ uint16_t banana = 0;
 unsigned long previousMillis = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   uint64_t systemTime = 0;
   while (systemTime == 0) {
     systemTime = bytesToUint64_StringDigits(simpleGET("/t"));
@@ -72,11 +72,15 @@ void loop() {
     sensorData.gyro_vec[0] = fixedGyroX;
     sensorData.gyro_vec[1] = fixedGyroY;
     sensorData.gyro_vec[2] = fixedGyroZ;
-    if (banana > 5000) {
+    if (banana > 350) {
       banana = 0;
       sensorData.track_section++;
+      if (sensorData.track_section > 3) {
+        sensorData.track_section = 1;
+      }
+      Serial.println("Track: " + String(sensorData.track_section));
     }
-    banana = banana + 10;
+    banana = banana + 1;
     sensorData.pos_lin = banana;
 
     SUDP_send(sensorData);
