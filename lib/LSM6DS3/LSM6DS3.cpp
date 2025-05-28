@@ -55,7 +55,7 @@ int LSM6DS3Class::begin()
   }
 
   // Set the Accelerometer control register
-  // Output Data Rate: 6,66 kHz 
+  // Output Data Rate: 3,33 kHz 
   // Full-Scale Selection: 8g
   // Low pass filter enabled
   // Bandwidth Selection: 400Hz
@@ -85,11 +85,11 @@ int LSM6DS3Class::begin()
   // HighPassFilter disabled
   writeRegister(LSM6DS3_CTRL7_G, 0x00);
 
-  // LPF2 Selection 
+  // LPF2 Selection at ODR/400
   // Configuration for Filters: 
   // Reference mode for HP Filter: off
-  // Composite filter: ODR/2 low pass filtered gets sent
-  writeRegister(LSM6DS3_CTRL8_XL, 0x09);
+  // Composite filter: ODR/4 low pass filtered gets sent
+  writeRegister(LSM6DS3_CTRL8_XL, 0xE8);
 
   // Something with DEN Values
   writeRegister(LSM6DS3_CTRL9_XL, 0x00);
