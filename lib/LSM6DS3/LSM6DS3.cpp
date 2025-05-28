@@ -54,15 +54,48 @@ int LSM6DS3Class::begin()
     return 0;
   }
 
-  // Set the Accelerometer control register to work at 1.66 kHz, 4g, analog chain bandwidth selection to 400 Hz and LP1 to ODR/4
-  // low pass filter (check figure9 of LSM6DS3's datasheet)
+  // Set the Accelerometer control register
+  // Output Data Rate: 1.66 kHz 
+  // Full-Scale Selection: 8g
+  // Low pass filter enabled
+  // Bandwidth Selection > Off
   writeRegister(LSM6DS3_CTRL1_XL, 0x8E);
 
-  // set gyroscope power mode to high performance and bandwidth to 16 MHz
+  // Set the Gyroscope control register
+  // Output data rate: 104Hz
+  // Full-Scale Selection: 500dps
+  writeRegister(LSM6DS3_CTRL2_G, 0x44);
+
+  // Hardware configurations
+  // No need for changes
+  // writeRegister(LSM6DS3_CTRL3_C, 0x00);
+
+  // Enable digital LPF1 for Gyroscope 
+  writeRegister(LSM6DS3_CTRL4_C, 0x01);
+
+  // Activate rounding on the accelerometer (0x20) or the Gyroscope (0x40)
+  writeRegister(LSM6DS3_CTRL5_C, 0x00);
+
+  // Select the bandwidth for the low-pass filter of the Gyroscope
+  // Just from ODR = 800Hz
+  writeRegister(LSM6DS3_CTRL6_C, 0x00);
+
+  // Enable Modes for Gyro
+  // High Performance mode enabled
+  // HighPassFilter disabled
   writeRegister(LSM6DS3_CTRL7_G, 0x00);
 
-  // Set Bandwidth to ODR/50 and enable the Reference mode
+  // LPF2 Selection 
+  // Configuration for Filters: 
+  // Reference mode for HP Filter: off
+  // Composite filter: ODR/2 low pass filtered gets sent
   writeRegister(LSM6DS3_CTRL8_XL, 0x09);
+
+  // Something with DEN Values
+  writeRegister(LSM6DS3_CTRL9_XL, 0x00);
+
+  // Pedometer functions etc. 
+  writeRegister(LSM6DS3_CTRL10_C, 0x00);
 
   return 1;
 }
