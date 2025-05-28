@@ -59,7 +59,7 @@ int LSM6DS3Class::begin()
   // Full-Scale Selection: 8g
   // Low pass filter enabled
   // Bandwidth Selection: 400Hz
-  writeRegister(LSM6DS3_CTRL1_XL, 0x9F);
+  writeRegister(LSM6DS3_CTRL1_XL, 0x9E);
 
   // Set the Gyroscope control register
   // Output data rate: 104Hz
