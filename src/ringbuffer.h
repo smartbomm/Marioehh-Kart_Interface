@@ -5,9 +5,9 @@
 #define RINGBUFFER_SIZE 34u
 // Define Zero-Border for Accelleration values
 #define ZERO_MOVEMENT 2200u
-// define Scaler
-#define SPEED_SCALER 16701u
-#define POSITION_SCALER 16701325u
+// define Scaler, BUFFERSIZE DABEI BEACHTEN
+#define SPEED_SCALER 14196126u
+#define POSITION_SCALER 1419612640163u
 //define g
 #define G 9.81 
 

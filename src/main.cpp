@@ -125,7 +125,7 @@ void loop() {
 
     sensorData.accel_lin = filteredAccelX;
     sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
-    sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
+    sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // STIMMT DIE BUFFERSIZE????
     sensorData.track_section = 1;
     SUDP_send(sensorData);
     counter_sending = 0u;
