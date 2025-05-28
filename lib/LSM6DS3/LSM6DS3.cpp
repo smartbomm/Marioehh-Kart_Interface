@@ -55,11 +55,11 @@ int LSM6DS3Class::begin()
   }
 
   // Set the Accelerometer control register
-  // Output Data Rate: 1.66 kHz 
+  // Output Data Rate: 6.66 kHz 
   // Full-Scale Selection: 8g
   // Low pass filter enabled
-  // Bandwidth Selection > Off
-  writeRegister(LSM6DS3_CTRL1_XL, 0x8E);
+  // Bandwidth Selection: 400Hz
+  writeRegister(LSM6DS3_CTRL1_XL, 0xAF);
 
   // Set the Gyroscope control register
   // Output data rate: 104Hz
