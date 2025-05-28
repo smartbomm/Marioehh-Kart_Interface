@@ -118,7 +118,7 @@ void loop() {
 
 
 
-    if (counter_sending >=100) {
+    if (counter_sending >=20) {
     sensorData.accel_vec[0] = accelX;
     sensorData.accel_vec[1] = accelY;
     sensorData.accel_vec[2] = accelZ;
