@@ -28,6 +28,7 @@ uint64_t filtered_data_pos_x = 0;
 int32_t merker_x=0; 
 uint32_t merker_velocity_x = 0;
 uint32_t buffer_sum_merker = 0;
+uint8_t counter_sending = 0u;
 
  //Ringbuffer defined in "ringbuffer.h"
 struct common_buffer_data Struct_Accel_X  = initialize_buffer();
@@ -124,9 +125,11 @@ void loop() {
     sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
     sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
     sensorData.track_section = 1;
-    
-
+    counter_sending++;
+    if (counter_sending >=100) {
     SUDP_send(sensorData);
+    counter_sending = 0u;
+    }
   }
   
 }

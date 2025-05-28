@@ -55,7 +55,7 @@ int LSM6DS3Class::begin()
   }
 
   // Set the Accelerometer control register
-  // Output Data Rate: 52 kHz 
+  // Output Data Rate: 833 kHz 
   // Full-Scale Selection: 8g
   // Low pass filter enabled
   // Bandwidth Selection: 400Hz
