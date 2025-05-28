@@ -89,7 +89,7 @@ int LSM6DS3Class::begin()
   // Configuration for Filters: 
   // Reference mode for HP Filter: off
   // Composite filter: ODR/4 low pass filtered gets sent
-  writeRegister(LSM6DS3_CTRL8_XL, 0xE8);
+  writeRegister(LSM6DS3_CTRL8_XL, 0xA8);
 
   // Something with DEN Values
   writeRegister(LSM6DS3_CTRL9_XL, 0x00);

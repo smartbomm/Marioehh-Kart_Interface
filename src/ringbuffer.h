@@ -50,13 +50,13 @@ void push_data_to_buffer (int32_t data, common_buffer_data* buffer){
     buffer->index_for_integration++;
 
     if (buffer -> last_time == 0u) {        // Fixing first Step from 0 to 460000000ms
-        buffer -> last_time = micros() - 1u;
+        buffer -> last_time = accurateMillis() - 1u;
     }
     else {
         buffer->last_time = buffer->current_time;
     }
 
-    buffer->current_time = micros();
+    buffer->current_time = accurateMillis();
     
 
     if (buffer->ringbuffer_index >= RINGBUFFER_SIZE) {
