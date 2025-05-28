@@ -74,7 +74,7 @@ int LSM6DS3Class::begin()
   writeRegister(LSM6DS3_CTRL4_C, 0x01);
 
   // Activate rounding on the accelerometer (0x20) or the Gyroscope (0x40)
-  writeRegister(LSM6DS3_CTRL5_C, 0x00);
+  writeRegister(LSM6DS3_CTRL5_C, 0x20);
 
   // Select the bandwidth for the low-pass filter of the Gyroscope
   // Just from ODR = 800Hz
