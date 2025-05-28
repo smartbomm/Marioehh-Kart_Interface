@@ -102,7 +102,7 @@ void loop() {
 
       
        sensorData.gyro_vec[2] = integration_64bit(Struct_Accel_X, &filtered_data_pos_x, filtered_data_velocity_x, merker_velocity_x);
-
+      counter_sending++;
     }
 
 
@@ -117,6 +117,8 @@ void loop() {
   
 
 
+
+    if (counter_sending >=100) {
     sensorData.accel_vec[0] = accelX;
     sensorData.accel_vec[1] = accelY;
     sensorData.accel_vec[2] = accelZ;
@@ -125,8 +127,6 @@ void loop() {
     sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
     sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
     sensorData.track_section = 1;
-    counter_sending++;
-    if (counter_sending >=100) {
     SUDP_send(sensorData);
     counter_sending = 0u;
     }
