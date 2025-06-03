@@ -45,18 +45,18 @@ void loop() {
   if (currentMillis - previousMillis >= READ_INTERVAL_MS) {
     previousMillis = currentMillis;
 
-    bool accelAvailable = IMU.accelerationAvailable();
-    bool gyroAvailable = IMU.gyroscopeAvailable();
+  //  bool accelAvailable = IMU.accelerationAvailable();
+   // bool gyroAvailable = IMU.gyroscopeAvailable();
 
-    if (accelAvailable) {
-      IMU.readAcceleration(accelX, accelY, accelZ);
+    if (IMU.readAcceleration(accelX, accelY, accelZ)) {
+      
 
 
       fixedAccelX = (int32_t)(accelX * ACCEL_SCALE);
       fixedAccelY = (int32_t)(accelY * ACCEL_SCALE);
       fixedAccelZ = (int32_t)(accelZ * ACCEL_SCALE);
     }
-
+/*
     if (gyroAvailable) {
       IMU.readGyroscope(gyroX, gyroY, gyroZ);
 
@@ -64,7 +64,7 @@ void loop() {
       fixedGyroY = (int32_t)(gyroY * GYRO_SCALE);
       fixedGyroZ = (int32_t)(gyroZ * GYRO_SCALE);
     }
-
+*/
     sensorData.accel_vec[0] = fixedAccelX;
     sensorData.accel_vec[1] = fixedAccelY;
     sensorData.accel_vec[2] = fixedAccelZ;
