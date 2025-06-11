@@ -14,7 +14,7 @@
 #define ZERO_MOVEMENT_Y 4000 
 // define empiric factor for valueing accel_Y in acceleration
 #define kacc 200
-// define empiric factor for valueing accel_Y in breaking
+// define empiric factor for valueing accel_Y in braking
 #define kbrak 130
 
 

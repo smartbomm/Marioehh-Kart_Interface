@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "samd21g18a.h": "c",
+        "flashstorage.h": "c",
+        "samd.h": "c",
+        "samd21.h": "c"
+    }
+}
