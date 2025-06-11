@@ -91,7 +91,7 @@ barcode_error_t barcode_get(uint8_t &value, uint32_t &velocity)
         uint8_t barcodeValue = 0u;
         for (uint8_t i = 0u; i < 8u; i++)
         {
-            if (barcodeReader.barcodeByte[i].whiteTime > barcodeReader.barcodeByte[i].blackTime)    
+            if (barcodeReader.barcodeByte[i].whiteTime >(2* barcodeReader.barcodeByte[i].blackTime))    
             {
                 barcodeValue |= (0x80u >> i);   //MSB first
             }
