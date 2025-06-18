@@ -20,7 +20,8 @@ int16_t accelX, accelY, accelZ;
 int16_t gyroX, gyroY, gyroZ;
 
 // Other variable definition
-int32_t filteredAccelX, filteredAccelY, filteredAccelZ;
+int32_t filteredAccelX, filteredAccelY, filteredAccelZ =0;
+int32_t filteredGyroZ =0;
 int32_t fixedGyroX, fixedGyroY, fixedGyroZ;
 int32_t filtered_data_velocity_x = 0;
 uint64_t filtered_data_pos_x = 0u;
@@ -31,7 +32,7 @@ uint32_t debugCount = 0u;
 struct common_buffer_data Struct_Accel_X  = initialize_buffer();
 struct common_buffer_data Struct_Accel_Y  = initialize_buffer();
 struct common_buffer_data Struct_Accel_Z  = initialize_buffer();
-
+struct common_buffer_data Struct_Gyro_Z = initialize_buffer();
 // Timestamps
 unsigned long previousMillis = 0;
 uint32_t previousMillis_stop_cond = 0;
@@ -83,7 +84,7 @@ debugCount = micros();
       filteredAccelZ = moving_average(&Struct_Accel_Z) ;
     
       // Eintragen für Debugging 
-      acc_complete_for_debugging = integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x, filteredAccelX,filteredAccelY);
+      
   
       
       // Stop recognition
@@ -98,20 +99,25 @@ debugCount = micros();
       //}
 
 
-       integration_64bit(&Struct_Accel_X, &filtered_data_pos_x, filtered_data_velocity_x);
-       counter_sending++;
+
     }
 
 
 
     if (IMU.readGyroscope(gyroX, gyroY, gyroZ)) 
     {
-    
+    push_data_to_buffer(gyroZ,&Struct_Gyro_Z);
+    filteredGyroZ=moving_average(&Struct_Gyro_Z);
 
 
       // Evtl. auch hier Aktualierung des Ringpuffers für die Gyro-Werte
     }
-      
+   
+     acc_complete_for_debugging = integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x, filteredAccelX,filteredAccelY);
+
+     integration_64bit(&Struct_Accel_X, &filtered_data_pos_x, filtered_data_velocity_x);
+       counter_sending++;
+
     debugCount=micros()-debugCount;
     Serial.println(debugCount);
 if (counter_sending>=20) 
