@@ -5,7 +5,7 @@
 
 #define ACCELERATION_FACTOR 1
 #define GYRO_FACTOR 1
-#define OFFSET_G_VERTICAL 4096
+#define OFFSET_G_VERTICAL 0 //müsste unser faktor 14196 sein bis jetzt null da keine Z Betrachtung
 #define THRESHOLD_LATERAL_ACCEL 40000
 
 

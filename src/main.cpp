@@ -54,8 +54,7 @@ void setup()
     while (true);
   }
 // Checking of correct functions for vector addition
-didi = vector_addition(333,444,555);
-Serial.print(didi);
+
 }
 
 
@@ -122,7 +121,11 @@ debugCount = micros();
       // Evtl. auch hier Aktualierung des Ringpuffers für die Gyro-Werte
     }
    
-     acc_complete_for_debugging = integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x, filteredAccelX,filteredAccelY);
+    
+      // Implementation of Vectorial acceleration combination
+
+     Struct_Accel_X.acc_complete = calculation_linear_acceleration(filteredAccelX, filteredAccelY,0,filteredGyroZ, filtered_data_velocity_x);
+     integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x);
 
      integration_64bit(&Struct_Accel_X, &filtered_data_pos_x, filtered_data_velocity_x);
        counter_sending++;
