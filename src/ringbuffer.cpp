@@ -55,7 +55,7 @@ int32_t moving_average (common_buffer_data* buffer)
 int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed, int32_t accel_linear,int32_t accel_Y) 
 {
     buffer->merker_accel_complete=buffer->acc_complete;  
-    buffer->merker_speed= *speed;                        //merke werden überschrieben
+    buffer->merker_speed= *speed;                        //merker werden überschrieben
     // folgend ist ein erster versuch einer betrachtung von Kurven 
     //hierzu wird der integration 32 bit accel y mit übergeben
     if (accel_Y<-ZERO_MOVEMENT_Y)  //rechtskurve
@@ -79,7 +79,7 @@ int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed, int32_t acc
     return buffer->acc_complete;
 }
 
-int64_t integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear) 
+void integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear) 
 {
     int32_t dt = buffer->current_time-buffer->last_time;
     int32_t v1=buffer->merker_speed;
