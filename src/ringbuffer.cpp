@@ -54,8 +54,8 @@ int32_t moving_average (common_buffer_data* buffer)
 
 int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed, int32_t accel_linear,int32_t accel_Y) 
 {
-    int32_t dx; 
-    buffer->merker_accel_complete=buffer->acc_complete;  //merker wird überschrieben
+    buffer->merker_accel_complete=buffer->acc_complete;  
+    buffer->merker_speed= *speed;                        //merker werden überschrieben
     // folgend ist ein erster versuch einer betrachtung von Kurven 
     //hierzu wird der integration 32 bit accel y mit übergeben
     if (accel_Y<-ZERO_MOVEMENT_Y)  //rechtskurve
@@ -70,21 +70,23 @@ int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed, int32_t acc
         {
         buffer->acc_complete=accel_linear;  // fall für gerade
         }
-    dx=buffer->acc_complete-buffer->merker_accel_complete;  //dx wird aus gesamt beschleunigung errechnet
-    buffer->merker_speed= *speed;
+    int32_t a1=buffer->merker_accel_complete;
+    int32_t a4=buffer->acc_complete;
+    int32_t a2=(2*a1+a4)/3;
+    int32_t a3=(a1+2*a4)/3;
     int32_t dt = buffer->current_time-buffer->last_time;
-    *speed = *speed+((dx*dt)/2)+(buffer->merker_accel_complete*dt);
+    *speed = *speed+((a1+2*a2+2*a3+a4)/6)*dt;
     return buffer->acc_complete;
 }
 
-int64_t integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear) 
+void integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear) 
 {
     int32_t dt = buffer->current_time-buffer->last_time;
-    //int32_t dt = 2;
-    int32_t dx = speed_linear-buffer->merker_speed;
-    *position = *position + ((dx*dt)/2)+(buffer->merker_speed*dt);
-    //*position = *position + speed_linear*dt;
-    return dx;
+    int32_t v1=buffer->merker_speed;
+    int32_t v4=speed_linear;
+    int32_t v2=(2*v1+v4)/3;
+    int32_t v3=(v1+2*v4)/3;
+    *position = *position+((v1+2*v2+2*v3+v4)/6)*dt;
 }
 
 

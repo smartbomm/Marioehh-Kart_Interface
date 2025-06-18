@@ -50,7 +50,7 @@ int32_t moving_average (common_buffer_data* buffer);
 int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed, int32_t accel_linear,int32_t accel_Y); 
 
 
-int64_t integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear); 
+void integration_64bit(common_buffer_data* buffer,uint64_t * position, int32_t speed_linear); 
 
 
 
