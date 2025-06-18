@@ -8,6 +8,8 @@
 #include "OdometerData.h"
 #include "ringbuffer.h"
 
+#include "vectors.h"
+
 // Time intervals
 constexpr unsigned long READ_INTERVAL_MS = 1;     // Interval between readings
 constexpr unsigned long INTERVAL_STOP_COND = 100;
@@ -27,6 +29,8 @@ uint64_t filtered_data_pos_x = 0u;
 uint8_t counter_sending = 0u;
 int32_t acc_complete_for_debugging = 0;
 uint32_t debugCount = 0u;
+int32_t didi = 0;
+
  //Ringbuffer defined in "ringbuffer.h"
 struct common_buffer_data Struct_Accel_X  = initialize_buffer();
 struct common_buffer_data Struct_Accel_Y  = initialize_buffer();
@@ -48,7 +52,12 @@ void setup()
   if (!IMU.begin()) {
     while (true);
   }
+// Checking of correct functions for vector addition
+didi = vector_addition(333,444,555);
+Serial.print(didi);
 }
+
+
 
 void loop() 
 {
