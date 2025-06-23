@@ -73,7 +73,7 @@ int32_t integration_32bit(common_buffer_data* buffer,int32_t* speed)
         buffer->acc_complete=accel_linear;  // fall für gerade
         }
     */
-   
+   //folgend Runge-Kutta 4.Ordnung für bessere numerische Genauigkeit/Dämpfung/Stabilität
     int32_t a1=buffer->merker_accel_complete;
     int32_t a4=buffer->acc_complete;
     int32_t a2=(2*a1+a4)/3;
