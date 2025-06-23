@@ -124,7 +124,8 @@ debugCount = micros();
     
       // Implementation of Vectorial acceleration combination
 
-     Struct_Accel_X.acc_complete = calculation_linear_acceleration(filteredAccelX, filteredAccelY,0,filteredGyroZ, filtered_data_velocity_x);
+     Struct_Accel_X.acc_complete = calculation_linear_acceleration(filteredAccelX,filteredAccelY,0,0,0); // 4096: 1g in current scaling version: +-8g for 16 bit
+    // Struct_Accel_X.acc_complete = calculation_linear_acceleration(filteredAccelX,filteredAccelY,0,0,0);
      integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x);
 
      integration_64bit(&Struct_Accel_X, &filtered_data_pos_x, filtered_data_velocity_x);
@@ -135,14 +136,14 @@ debugCount = micros();
 if (counter_sending>=20) 
 {
 
-    sensorData.accel_vec[0] = accelX;
+    sensorData.accel_vec[0] = filteredAccelX;
     sensorData.accel_vec[1] = filteredAccelY;
     sensorData.accel_vec[2] = filteredAccelZ;
     sensorData.gyro_vec[0] = Struct_Accel_X.merker_buffer_sum;    
-    sensorData.gyro_vec[1] = acc_complete_for_debugging;  
-    sensorData.gyro_vec[2] = gyroZ; 
+    sensorData.gyro_vec[1] = Struct_Accel_X.acc_complete;  
+    sensorData.gyro_vec[2] = filteredGyroZ; 
 
-    sensorData.accel_lin = filteredAccelX;
+    sensorData.accel_lin = accelX;
     sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
     sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
     sensorData.track_section = 1;

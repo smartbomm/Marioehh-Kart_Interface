@@ -62,23 +62,23 @@ int LSM6DS3Class::begin()
   writeRegister(LSM6DS3_CTRL1_XL, 0x9E);
 
   // Set the Gyroscope control register
-  // Output data rate: 104Hz
-  // Full-Scale Selection: 500dps
-  writeRegister(LSM6DS3_CTRL2_G, 0x44);
+  // Output data rate: 3,33 kHz
+  // Full-Scale Selection: 1000dps
+  writeRegister(LSM6DS3_CTRL2_G, 0x98);
 
   // Hardware configurations
   // No need for changes
   // writeRegister(LSM6DS3_CTRL3_C, 0x00);
 
   // Enable digital LPF1 for Gyroscope 
-  writeRegister(LSM6DS3_CTRL4_C, 0x01);
+  writeRegister(LSM6DS3_CTRL4_C, 0x02);
 
-  // Activate rounding on the accelerometer (0x20) or the Gyroscope (0x40)
-  writeRegister(LSM6DS3_CTRL5_C, 0x20);
+  // Activate rounding on the accelerometer (0x20) or the Gyroscope (0x40) or both (0x60)
+  writeRegister(LSM6DS3_CTRL5_C, 0x60);
 
   // Select the bandwidth for the low-pass filter of the Gyroscope
-  // Just from ODR = 800Hz
-  writeRegister(LSM6DS3_CTRL6_C, 0x00);
+  // ODR = 3,3 kHz ==> Bandwidth = 172 Hz 
+  writeRegister(LSM6DS3_CTRL6_C, 0x02);
 
   // Enable Modes for Gyro
   // High Performance mode enabled
