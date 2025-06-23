@@ -10,8 +10,8 @@
 #include "OdometerData.h"
 
 
-constexpr float ACCEL_SCALE = 512.0;              // Custom scaling factor for acceleration
-constexpr float GYRO_SCALE = 32768.0 / 2000.0;    // Scale gyroscope data from dps to fixed-point
+constexpr float ACCEL_SCALE = 1;              // Custom scaling factor for acceleration
+constexpr float GYRO_SCALE = 1;    // Scale gyroscope data from dps to fixed-point
 constexpr unsigned long READ_INTERVAL_MS = 20;     // Interval between readings
 
 
