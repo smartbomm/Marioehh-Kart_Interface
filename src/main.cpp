@@ -17,8 +17,8 @@ constexpr unsigned long READ_INTERVAL_MS = 20;     // Interval between readings
 
 data sensorData;
 
-float accelX, accelY, accelZ;
-float gyroX, gyroY, gyroZ;
+int16_t accelX, accelY, accelZ;
+int16_t gyroX, gyroY, gyroZ;
 
 int32_t fixedAccelX, fixedAccelY, fixedAccelZ;
 int32_t fixedGyroX, fixedGyroY, fixedGyroZ;
