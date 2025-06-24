@@ -47,4 +47,11 @@ barcode_error_t barcode_get(uint8_t &value, uint32_t &velocity);
  */
 void barcode_init(barcodeConfig_t config);
 
+/**
+ * @brief ISR function for the barcode reader
+ * 
+ * 
+ */
+void barcodeIsr(void);
+
 #endif

@@ -4,12 +4,29 @@
 #include <stdint.h>
 #include <Arduino_LSM6DS3.h>
 
+#include <BarcodeReader.h>
+#include <PinConfig.h>
+
 #include "SimpleGET.h"
 #include "OdometerData.h"
 #include "Ringbuffer.h"
 
+
+// Barcode recognition
+        // Interrupt vector for Barcode recognition
+        void EIC_Handler(void) {
+            if (EIC->INTFLAG.reg & EIC_INTFLAG_EXTINT7) {
+                EIC->INTFLAG.reg = EIC_INTFLAG_EXTINT7;  // Flag löschen
+                barcodeIsr();  // Barcode ISR aufrufen
+            }
+        }
+        // Define variable for Barcode handling
+        barcodeConfig_t barcode_config;
+        uint8_t barcode_value = 0;
+        uint32_t barcode_velocity = 0;
+
 // Time intervals
-constexpr unsigned long READ_INTERVAL_MS = 1;     // Interval between readings
+constexpr unsigned long READ_INTERVAL_MS = 2;     // Interval between readings
 constexpr unsigned long INTERVAL_STOP_COND = 100;
 
 // Data struct to be sent
@@ -37,7 +54,16 @@ unsigned long previousMillis = 0;
 uint32_t previousMillis_stop_cond = 0;
 
 
-void setup() {
+void setup()
+ {
+  //Barcode reader setup
+    configure_extint();
+
+    barcode_config.pin = 4;       // Pin where the barcode reader is connected to
+    barcode_config.bitLength = 7; // Length in mm of 1 bit (seuqence od black and white section)
+    barcode_init(barcode_config);
+
+  // Other configurations
   Serial.begin(9600);
   uint64_t systemTime = 0;
   while (systemTime == 0) {
@@ -49,18 +75,27 @@ void setup() {
   }
 }
 
-void loop() {
+void loop() 
+{
        unsigned long currentMillis = accurateMillis();
-//debugCount = micros();
+debugCount = micros();
 
-  if (currentMillis - previousMillis >= READ_INTERVAL_MS) {
+  if (currentMillis - previousMillis >= READ_INTERVAL_MS) 
+  {
     previousMillis = currentMillis;
 
     //bool accelAvailable = IMU.accelerationAvailable();
    // bool gyroAvailable = IMU.gyroscopeAvailable();
-    if (IMU.readAcceleration(accelX, accelY, accelZ)) {
-      if ((accelX > (int32_t)-ZERO_MOVEMENT) & (accelX < (int32_t)ZERO_MOVEMENT)) {
+    if (IMU.readAcceleration(accelX, accelY, accelZ)) 
+    {
+      if ((accelX > (int32_t)-ZERO_MOVEMENT) & (accelX < (int32_t)ZERO_MOVEMENT))
+      {
         accelX =0u;
+      }     
+      // zero movemnet auch für y
+      if ((accelY > (int32_t)-ZERO_MOVEMENT) & (accelY < (int32_t)ZERO_MOVEMENT))
+      {
+        accelY =0u;
       }     
 
       // Aktualisierung des Ringpuffers 
@@ -69,11 +104,11 @@ void loop() {
       push_data_to_buffer(accelZ, &Struct_Accel_Z);
       // Auslesen der Filterwerte
       filteredAccelX = moving_average(&Struct_Accel_X) ;
-      //filteredAccelY = moving_average(&Struct_Accel_Y) ;
-      //filteredAccelZ = moving_average(&Struct_Accel_Z) ;
+      filteredAccelY = moving_average(&Struct_Accel_Y) ;
+      filteredAccelZ = moving_average(&Struct_Accel_Z) ;
     
       // Eintragen für Debugging 
-      dx_for_debugging = integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x, filteredAccelX);
+      dx_for_debugging = integration_32bit(&Struct_Accel_X, &filtered_data_velocity_x, filteredAccelX,filteredAccelY);
   
       
       // Stop recognition
@@ -94,34 +129,58 @@ void loop() {
 
 
 
-   /* if (gyroAvailable) {
-      IMU.readGyroscope(gyroX, gyroY, gyroZ);
+    if (IMU.readGyroscope(gyroX, gyroY, gyroZ)) 
+    {
+    
 
 
       // Evtl. auch hier Aktualierung des Ringpuffers für die Gyro-Werte
     }
-      */
-    //debugCount=micros()-debugCount;
-   // Serial.println(debugCount);
-if (counter_sending>=20) {
+      
+    debugCount=micros()-debugCount;
+    Serial.println(debugCount);
 
-    sensorData.accel_vec[0] = accelX;
-    sensorData.accel_vec[1] = accelY;
-    sensorData.accel_vec[2] = accelZ;
-    sensorData.gyro_vec[0] = Struct_Accel_X.merker_buffer_sum;    
-    sensorData.gyro_vec[1] = dx_for_debugging;  
-    sensorData.gyro_vec[2] = Struct_Accel_X.merker_speed; 
+    // Check against real data gathered from Barcode reader
+    switch (barcode_get(barcode_value, barcode_velocity))
+    {
+    case NO_CODE_DETECTED:
+        Serial.println("No code detected");
+        break;
+    case READING_IN_PROGRESS:
+        Serial.println("Reading in progress");
+        break;
+    case READING_SUCCESSFUL:
+        Serial.print("Barcode value: ");
+        Serial.print(barcode_value);
 
-    sensorData.accel_lin = filteredAccelX;
-    sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
-    sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
-    sensorData.track_section = 1;
-    
+        Serial.print(" Velocity: ");
+        Serial.println(barcode_velocity);
+        //Hard set of Velocity to actual measured velocity by the barcode reader
+        filtered_data_velocity_x = barcode_velocity* SPEED_SCALER;      // barcode velocity is in mm/s; needs scaling
+        break;
+    }
 
-    SUDP_send(sensorData);
-    counter_sending=0U;
+    // Send the gathered data
+    if (counter_sending>=20) 
+    {
 
-}
+        sensorData.accel_vec[0] = accelX;
+        sensorData.accel_vec[1] = filteredAccelY;
+        sensorData.accel_vec[2] = filteredAccelZ;
+        sensorData.gyro_vec[0] = Struct_Accel_X.merker_buffer_sum;    
+        sensorData.gyro_vec[1] = dx_for_debugging;  
+        sensorData.gyro_vec[2] = Struct_Accel_X.merker_speed; 
+
+        sensorData.accel_lin = filteredAccelX;
+        sensorData.speed_lin = filtered_data_velocity_x/SPEED_SCALER;
+        sensorData.pos_lin = (uint32_t)(filtered_data_pos_x/POSITION_SCALER); // account for Integration error
+        sensorData.track_section = barcode_value;
+        
+
+        SUDP_send(sensorData);
+        counter_sending=0U;
+
+    }
   }
   
 }
