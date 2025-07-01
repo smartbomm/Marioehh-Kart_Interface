@@ -105,15 +105,6 @@ void barcodeIsr()
     // All other edges
     else if (barcodeReader.edgeCounter < 18u)
     {
-        // Check for timeouts
-        if ((actualTime - barcodeReader.lastTime) > barcodeReader.readingTimeout)
-        {
-            // Timeout error, reset edge counter
-            _reset_counters();
-            barcode_error = TIMEOUT_ERROR;
-            //DISABLE_EXTINT_7();
-            return;
-        }
         if (pinPhase) // Black Phase ending
         {
             barcodeReader.barcodeByte[barcodeReader.bitCounter].blackTime = actualTime - barcodeReader.lastTime;
@@ -134,7 +125,7 @@ void barcodeIsr()
 void barcode_init(barcodeConfig_t config)
 {
     barcodeReader.config = config;
-    barcodeReader.config.bitLength *= 1000000u;
+    barcodeReader.config.bitLength *= 1000u;
     barcodeReader.pin = config.pin;
     barcodeReader.readingTimeout = config.readingTimeout;
     barcodeReader.bitCounter = 0u;
@@ -180,7 +171,19 @@ barcode_error_t barcode_get(uint8_t &value, uint32_t &velocity)
     }
     else // Not finished yet
     {
-        reading_status = READING_IN_PROGRESS;
+        //Check for timeouts
+        uint32_t actualTime = micros();
+        if (actualTime - barcodeReader.lastTime > barcodeReader.readingTimeout)
+        {
+            _reset_counters();
+            reading_status = TIMEOUT_ERROR;
+
+        }
+        else
+        {
+            reading_status = READING_IN_PROGRESS;
+        }
+        
     }
 #ifdef DEBUG
     switch (reading_status)
