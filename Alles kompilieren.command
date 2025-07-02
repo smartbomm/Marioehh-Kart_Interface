@@ -7,5 +7,5 @@ echo "DONE"
 cd examples
 echo "javac -cp ../MarioehKart_v1_1-jdk$1.jar ./MapToCsv.java"
 javac -cp ../MarioehKart_v1_1-jdk"$1".jar ./MapToCsv.java
-echo "java -cp ../MarioehKart_v1_1-jdk$1.jar:. MapToCsv ../CSV-Beispiele/Bahn_Abschnitt_1.csv ../test/output 10"
-java -cp ../MarioehKart_v1_1.jar-jdk"$1":. MapToCsv ../CSV-Beispiele/Bahn_Abschnitt_1.csv ../test/output 10
+echo "java -cp ../MarioehKart_v1_1-jdk$1.jar:. MapToCsv ../CSV-Beispiele/complete_track.csv ../test/output 10"
+java -cp ../MarioehKart_v1_1-jdk"$1.jar":. MapToCsv ../CSV-Beispiele/complete_track.csv ../test/output 10

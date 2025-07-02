@@ -97,7 +97,7 @@ public class Map {
             csvReader = new BufferedReader(new FileReader(csv));
             String line;
             line = csvReader.readLine(); // erste line überspringen
-            int sectionCount = -1;
+            int sectionCount = 0;
             while ((line = csvReader.readLine()) != null) {
                 String[] values = line.split(separator);
                 System.out.print(values[0]);
