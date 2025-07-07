@@ -25,8 +25,8 @@ int32_t fixedGyroX, fixedGyroY, fixedGyroZ;
 uint16_t banana = 0;
 
 unsigned long previousMillis = 0;
-uint8_t tracks[] =         {18  ,   19,   22,   23,  25,   30,  31,   34,   38,    3,    8,    9,   12,   14,   15,  28};
-uint16_t track_lengths[] = {2197, 1538, 1037, 1019, 806,  250, 691, 1726, 1381, 2790, 2761, 1492, 3733, 1356, 1424, 796};
+uint8_t tracks[] =         {18  ,   19,   22,   40,  25,    31,   34,   38,    3,    8,    9,   12,   14,   15,  28};
+uint16_t track_lengths[] = {2197, 1538,  778, 1394, 750,   691, 1841, 1266, 3135, 2416, 1492, 3733, 1356, 1539, 681};
 uint8_t track_index = 0;
 
 
